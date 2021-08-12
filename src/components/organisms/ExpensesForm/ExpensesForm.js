@@ -48,6 +48,8 @@ const ExpensesForm = ({ formType }) => {
       enableReinitialize
       initialValues={initialValues}
       onSubmit={async values => {
+        setMessages([])
+
         let isValidate = true
 
         for (let value in values) {
@@ -83,23 +85,24 @@ const ExpensesForm = ({ formType }) => {
         <>
           { redirectToHome && <Redirect to={routes.home} /> }
           <Form noValidate>
-            <Label>Cena</Label>
-            <Field name="price" type="number" />
-            <Label>Miejsce</Label>
-            <Field name="place" type="text" />
-            <Label>Kategoria</Label>
-            <Field name="category" type="number" />
-            <Label>Priorytet</Label>
-            <Field name="priority" type="number" />
+            <Label htmlFor="price">Cena</Label>
+            <Field type="number" name="price" id="price" />
+            <Label htmlFor="place">Miejsce</Label>
+            <Field type="text" name="place" id="place" />
+            <Label htmlFor="category">Kategoria</Label>
+            <Field type="number" name="category" id="category" />
+            <Label htmlFor="priority">Priorytet</Label>
+            <Field type="number" name="priority" id="priority" />
             <Button
               background={theme.colors.secondary}
               type="submit"
+              data-testid="submitButton"
             >
               { formType === 'add' ? <FontAwesomeIcon icon={faPlus} /> : <FontAwesomeIcon icon={faSave} /> }
             </Button>
             {
               messages.map(message => (
-                <Message>{ message }</Message>
+                <Message key={message}>{ message }</Message>
               ))
             }
           </Form>
