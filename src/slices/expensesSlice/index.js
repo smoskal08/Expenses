@@ -174,7 +174,7 @@ const expensesSlice = createSlice({
   },
   extraReducers: {
     [getExpenses.fulfilled]: (state, { payload }) => {
-      state.expensesList = payload
+      state.expensesList = payload ? payload : []
     }
   }
 })

@@ -96,17 +96,17 @@ const AuthForm = ({ formType }) => {
           {
             formType !== '' ? (
               <>
-                <Label>Adres email</Label>
-                <Field name="email" type="email" />
-                <Label>Hasło</Label>
-                <Field name="password" type="password" />
+                <Label htmlFor="email">Adres email</Label>
+                <Field type="email" name="email" id="email" />
+                <Label htmlFor="password">Hasło</Label>
+                <Field type="password" name="password" id="password" />
               </>
             ) : (
               <>
-                <Label>Imię</Label>
-                <Field name="firstName" type="text" />
-                <Label>Nazwisko</Label>
-                <Field name="lastName" type="text" />
+                <Label htmlFor="firstName">Imię</Label>
+                <Field type="text" name="firstName" id="firstName" />
+                <Label htmlFor="lastName">Nazwisko</Label>
+                <Field type="text" name="lastName" id="lastName" />
               </>
             )
           }

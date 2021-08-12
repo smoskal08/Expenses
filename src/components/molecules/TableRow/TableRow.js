@@ -36,7 +36,7 @@ const TableRow = ({ id, day, price, place, category, priority }) => {
         <StyledButton background={theme.colors.secondary} onClick={handleRedirectToEdit}><FontAwesomeIcon icon={faEdit} /></StyledButton>
       </StyledCell>
       <StyledCell noPadding>
-        <StyledButton background={theme.colors.tertiary} onClick={() => dispatch(openModal({ id, day, price, place, category, priority }))}><FontAwesomeIcon icon={faTimes} /></StyledButton>
+        <StyledButton background={theme.colors.tertiary} onClick={() => dispatch(openModal({ id, day, price, place, category, priority }))} data-testid="deleteButton"><FontAwesomeIcon icon={faTimes} /></StyledButton>
       </StyledCell>
     </tr>
   )

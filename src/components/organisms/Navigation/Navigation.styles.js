@@ -45,7 +45,7 @@ export const StyledLinkWrapper = styled.li`
 export const StyledLink = styled(NavLink)`
   margin-left: 50px;
   ${baseLink}
-
+  
   &.active {
     display: none;
   }
