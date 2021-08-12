@@ -30,11 +30,11 @@ const Dashboard = () => {
         </thead>
         <tbody>
           {
-            expensesList ? expensesList.map(expense => (
+            expensesList.length > 0 ? expensesList.map(expense => (
               <TableRow key={expense.id} {...expense} />
             )) : (
               <tr>
-                <th colspan="7">Brak wydatków</th>
+                <StyledHeadCell colSpan="7">Brak wydatków</StyledHeadCell>
               </tr>
             )
           }
