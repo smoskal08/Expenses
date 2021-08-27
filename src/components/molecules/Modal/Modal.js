@@ -6,15 +6,14 @@ import Heading from 'components/atoms/Heading/Heading'
 import { StyledWrapper, StyledButtonsBox, StyledInfoBox, StyledInfoParagraph, StyledBoldText } from './Modal.styles'
 import { theme } from 'assets/styles/theme'
 
-const rootElement = document.getElementById('root')
-
 const Modal = () => {
   const { id, day, price, place, category, priority } = useSelector(state => state.expenses.actualExpense)
   const isModalOpen = useSelector(state => state.expenses.isModalOpen)
   const accessToken = useSelector(state => state.auth.accessToken)
   const csrfToken = document.cookie.split('=')[1]
   const dispatch = useDispatch()
-
+  const rootElement = document.getElementById('root')
+  
   const handleDeleteClick = async () => {
     await dispatch(deleteExpense({ id, accessToken, csrfToken }))
     dispatch(closeModal())

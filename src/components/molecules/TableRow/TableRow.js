@@ -33,7 +33,7 @@ const TableRow = ({ id, day, price, place, category, priority }) => {
       <StyledCell>{ category }</StyledCell>
       <StyledCell>{ priority }</StyledCell>
       <StyledCell noPadding>
-        <StyledButton background={theme.colors.secondary} onClick={handleRedirectToEdit}><FontAwesomeIcon icon={faEdit} /></StyledButton>
+        <StyledButton background={theme.colors.secondary} onClick={handleRedirectToEdit} data-testid="editButton"><FontAwesomeIcon icon={faEdit} /></StyledButton>
       </StyledCell>
       <StyledCell noPadding>
         <StyledButton background={theme.colors.tertiary} onClick={() => dispatch(openModal({ id, day, price, place, category, priority }))} data-testid="deleteButton"><FontAwesomeIcon icon={faTimes} /></StyledButton>

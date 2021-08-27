@@ -4,13 +4,15 @@ import { Redirect } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from 'slices/authSlice'
 import { routes } from 'routes'
-import { StyledWrapper, StyledList, StyledProfileWrapper, StyledProfile, StyledLinkWrapper, StyledLink, StyledLogoutButton } from './Navigation.styles'
+import { StyledWrapper, StyledList, StyledProfileWrapper, StyledProfile, StyledLinkWrapper, StyledLink, StyledLogoutButton, StyledFontAwesomeIcon, DisplayWrapper } from './Navigation.styles'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 
 const Navigation = ({ route }) => {
   const isAuthUser = useSelector(state => state.auth.isAuthUser)
   const user = useSelector(state => state.auth.user)
   const isModalOpen = useSelector(state => state.expenses.isModalOpen)
   const [profileName, setProfileName] = useState('')
+  const [menuVisible, setMenuVisible] = useState(true)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -57,21 +59,30 @@ const Navigation = ({ route }) => {
     }
   }
 
+  const handleMenuVisibleChange = () => setMenuVisible(prevState => !prevState)
+
   return (
     <StyledWrapper route={route} isModalOpen={isModalOpen}>
       <StyledList>
-        <StyledProfileWrapper>
-          {
-            isAuthUser ? (
-              <StyledProfile>
-                { profileName }
-              </StyledProfile>
-            ) : null
-          }
-        </StyledProfileWrapper>
-        <StyledLinkWrapper>
-          { links() }
-        </StyledLinkWrapper>
+        <StyledFontAwesomeIcon icon={faBars} onClick={handleMenuVisibleChange} />
+        {
+          menuVisible ? (
+            <>
+              <StyledProfileWrapper>
+                {
+                  isAuthUser ? (
+                    <StyledProfile>
+                      { profileName }
+                    </StyledProfile>
+                  ) : null
+                }
+              </StyledProfileWrapper>
+              <StyledLinkWrapper>
+                { links() }
+              </StyledLinkWrapper>
+            </>
+          ) : null
+        }
       </StyledList>
     </StyledWrapper>
   )
