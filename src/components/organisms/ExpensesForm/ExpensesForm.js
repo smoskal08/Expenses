@@ -97,6 +97,7 @@ const ExpensesForm = ({ formType }) => {
               background={theme.colors.secondary}
               type="submit"
               data-testid="submitButton"
+              aria-label="Submit"
             >
               { formType === 'add' ? <FontAwesomeIcon icon={faPlus} /> : <FontAwesomeIcon icon={faSave} /> }
             </Button>

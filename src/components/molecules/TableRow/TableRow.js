@@ -33,10 +33,10 @@ const TableRow = ({ id, day, price, place, category, priority }) => {
       <StyledCell>{ category }</StyledCell>
       <StyledCell>{ priority }</StyledCell>
       <StyledCell noPadding>
-        <StyledButton background={theme.colors.secondary} onClick={handleRedirectToEdit} data-testid="editButton"><FontAwesomeIcon icon={faEdit} /></StyledButton>
+        <StyledButton aria-label="Edit" background={theme.colors.secondary} onClick={handleRedirectToEdit} data-testid="editButton"><FontAwesomeIcon icon={faEdit} /></StyledButton>
       </StyledCell>
       <StyledCell noPadding>
-        <StyledButton background={theme.colors.tertiary} onClick={() => dispatch(openModal({ id, day, price, place, category, priority }))} data-testid="deleteButton"><FontAwesomeIcon icon={faTimes} /></StyledButton>
+        <StyledButton aria-label="Delete" background={theme.colors.tertiary} onClick={() => dispatch(openModal({ id, day, price, place, category, priority }))} data-testid="deleteButton"><FontAwesomeIcon icon={faTimes} /></StyledButton>
       </StyledCell>
     </tr>
   )
