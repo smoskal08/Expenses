@@ -7,13 +7,16 @@ import { ThemeProvider } from 'styled-components'
 import { theme } from 'assets/styles/theme'
 
 const AllTheProviders = ({ children }) => (
-  <Provider store={store}>
-    <Router>
-      <ThemeProvider theme={theme}>
-        {children}
-      </ThemeProvider>
-    </Router>
-  </Provider>
+  <>
+    <div id="root" />
+    <Provider store={store}>
+      <Router>
+        <ThemeProvider theme={theme}>
+          {children}
+        </ThemeProvider>
+      </Router>
+    </Provider>
+  </>
 )
 
 const customRender = (ui, options) => render(ui, { wrapper: AllTheProviders, ...options })

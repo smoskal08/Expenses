@@ -40,7 +40,6 @@ export const addExpense = createAsyncThunk(
   'expenses/addExpense',
   async ({ price, place, category, priority, accessToken, csrfToken }, thunkAPI) => {
     try {
-      console.log('add');
       await fetch(`${server}${endpoints.expenses.main}`, {
         method: 'POST',
         mode: 'cors',
