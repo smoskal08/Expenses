@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from 'slices/authSlice'
 import { routes } from 'routes'
-import { StyledWrapper, StyledList, StyledProfileWrapper, StyledProfile, StyledLinkWrapper, StyledLink, StyledLogoutButton, StyledFontAwesomeIcon, DisplayWrapper } from './Navigation.styles'
+import { StyledWrapper, StyledList, StyledProfileWrapper, StyledProfile, StyledLinkWrapper, StyledLink, StyledLogoutButton, StyledFontAwesomeIcon } from './Navigation.styles'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 
 const Navigation = ({ route }) => {

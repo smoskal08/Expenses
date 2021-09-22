@@ -146,18 +146,161 @@ export const deleteExpense = createAsyncThunk(
   }
 )
 
+export const addCategory = createAsyncThunk(
+  'expenses/addCategory',
+  async ({ name, accessToken, csrfToken }, thunkAPI) => {
+    try {
+      await fetch(`${server}${endpoints.expenses.category}`, {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-CSRFTOKEN': csrfToken
+        },
+        body: JSON.stringify({
+          name
+        })
+      })
+        .then(res => {
+          if (!res.ok) throw res
+        })
+        .catch(err => {
+          err.json().then(errData => checkErrors(errData.detail, csrfToken, {
+            name,
+            accessToken,
+            csrfToken
+          }, addCategory))
+        })
+    } catch (err) {
+      console.error('Error', err.response.data)
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
+  }
+)
+
+export const getCategory = createAsyncThunk(
+  'expenses/getCategory',
+  async ({ accessToken, csrfToken }, thunkAPI) => {
+    try {
+      const res = await fetch(`${server}${endpoints.expenses.category}`, {
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-CSRFTOKEN': csrfToken
+        }
+      })
+        .then(res => {
+          if (!res.ok) throw res
+          return res.json()
+        })
+        .catch(err => {
+          err.json().then(errData => checkErrors(errData.detail, csrfToken, {
+            accessToken,
+            csrfToken
+          }, getCategory))
+        })
+      
+      return res
+    } catch (err) {
+      console.error('Error', err.response.data)
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
+  }
+)
+
+export const addPriority = createAsyncThunk(
+  'expenses/addPriority',
+  async ({ name, accessToken, csrfToken }, thunkAPI) => {
+    try {
+      await fetch(`${server}${endpoints.expenses.priority}`, {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-CSRFTOKEN': csrfToken
+        },
+        body: JSON.stringify({
+          name
+        })
+      })
+        .then(res => {
+          if (!res.ok) throw res
+        })
+        .catch(err => {
+          err.json().then(errData => checkErrors(errData.detail, csrfToken, {
+            name,
+            accessToken,
+            csrfToken
+          }, addPriority))
+        })
+    } catch (err) {
+      console.error('Error', err.response.data)
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
+  }
+)
+
+export const getPriority = createAsyncThunk(
+  'expenses/getPriority',
+  async ({ accessToken, csrfToken }, thunkAPI) => {
+    try {
+      const res = await fetch(`${server}${endpoints.expenses.priority}`, {
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-CSRFTOKEN': csrfToken
+        }
+      })
+        .then(res => {
+          if (!res.ok) throw res
+          return res.json()
+        })
+        .catch(err => {
+          err.json().then(errData => checkErrors(errData.detail, csrfToken, {
+            accessToken,
+            csrfToken
+          }, getPriority))
+        })
+
+      return res
+    } catch (err) {
+      console.error('Error', err.response.data)
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
+  }
+)
+
 const initialState = {
   expensesList: [],
-  isModalOpen: false,
-  actualExpense: {}
+  isDeleteModalOpen: false,
+  actualExpense: {},
+  isCategoryPriorityModalOpen: false,
+  categoryPriorityModalType: '',
+  categories: [],
+  priorities: [],
+  addCategoryOrPriority: false
 }
 
 const expensesSlice = createSlice({
   name: 'expenses',
   initialState,
   reducers: {
-    openModal: (state, { payload }) => {
-      state.isModalOpen = true
+    openDeleteModal: (state, { payload }) => {
+      state.isDeleteModalOpen = true
       state.actualExpense = {
         id: payload.id,
         day: payload.day,
@@ -167,17 +310,36 @@ const expensesSlice = createSlice({
         priority: payload.priority,
       }
     },
-    closeModal: (state, action) => {
-      state.isModalOpen = false
-    }
+    closeDeleteModal: (state, action) => {
+      state.isDeleteModalOpen = false
+    },
+    openCategoryPriorityModal: (state, { payload }) => {
+      state.isCategoryPriorityModalOpen = true
+      state.categoryPriorityModalType = payload
+    },
+    closeCategoryPriorityModal: (state, action) => {
+      state.isCategoryPriorityModalOpen = false
+    },
   },
   extraReducers: {
     [getExpenses.fulfilled]: (state, { payload }) => {
       state.expensesList = payload ? payload : []
-    }
+    },
+    [getCategory.fulfilled]: (state, { payload }) => {
+      state.categories = payload ? payload : []
+    },
+    [getPriority.fulfilled]: (state, { payload }) => {
+      state.priorities = payload ? payload : []
+    },
+    [addCategory.fulfilled]: (state, action) => {
+      state.addCategoryOrPriority = !state.addCategoryOrPriority
+    },
+    [addPriority.fulfilled]: (state, action) => {
+      state.addCategoryOrPriority = !state.addCategoryOrPriority
+    },
   }
 })
 
-export const { openModal, closeModal } = expensesSlice.actions
+export const { openDeleteModal, closeDeleteModal, openCategoryPriorityModal, closeCategoryPriorityModal } = expensesSlice.actions
 
 export default expensesSlice.reducer;

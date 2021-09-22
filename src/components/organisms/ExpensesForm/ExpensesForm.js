@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { Redirect } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { Formik } from 'formik';
-import { addExpense, editExpense } from 'slices/expensesSlice';
-import Form from 'components/atoms/Form/Form';
-import Field from 'components/atoms/Field/Field';
-import Message from 'components/atoms/Message/Message';
-import Label from 'components/atoms/Label/Label';
-import Button from 'components/atoms/Button/Button';
-import { routes } from 'routes';
+import { Redirect } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { Formik } from 'formik'
+import { addExpense, editExpense, openCategoryPriorityModal, getCategory, getPriority } from 'slices/expensesSlice'
+import Form from 'components/atoms/Form/Form'
+import Field from 'components/atoms/Field/Field'
+import Message from 'components/atoms/Message/Message'
+import Label from 'components/atoms/Label/Label'
+import Button from 'components/atoms/Button/Button'
+import { routes } from 'routes'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSave, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { theme } from 'assets/styles/theme'
+import { Select } from './ExpensesForm.styles'
 
 const addInitialValues = {
   price: '',
@@ -25,15 +26,51 @@ let prevExpense = JSON.parse(sessionStorage.getItem('prevExpense'))
 const ExpensesForm = ({ formType }) => {
   const [messages, setMessages] = useState([])
   const [redirectToHome, setRedirectToHome] = useState(false)
+  const [category, setCategory] = useState('')
+  const [priority, setPriority] = useState('')
   const [initialValues, setInitialValues] = useState(addInitialValues)
+  const categories = useSelector(state => state.expenses.categories)
+  const priorities = useSelector(state => state.expenses.priorities)
+  const addCategoryOrPriority = useSelector(state => state.expenses.addCategoryOrPriority)
   const accessToken = useSelector(state => state.auth.accessToken)
+  const csrfToken = document.cookie.split('=')[1]
   const dispatch = useDispatch()
+
+  const handleSelectValueChange = e => {
+    switch (e.target.name) {
+      case 'category':
+        setCategory(e.target.value)
+        break
+      case 'priority':
+        setPriority(e.target.value)
+        break
+      default:
+        return
+    }
+  }
+
+  useEffect(() => {
+    dispatch(getCategory({ accessToken, csrfToken }))
+    dispatch(getPriority({ accessToken, csrfToken }))
+
+    if (category === "Dodaj kategorię") {
+      dispatch(openCategoryPriorityModal('category'))
+      setCategory('- wybierz kategorię -')
+    }
+
+    if (priority === "Dodaj priorytet") {
+      dispatch(openCategoryPriorityModal('priority'))
+      setPriority('- wybierz priorytet -')
+    }
+  }, [category, priority, addCategoryOrPriority, accessToken, csrfToken, dispatch])
 
   useEffect(() => {
     if (formType === 'edit') {
       prevExpense = JSON.parse(sessionStorage.getItem('prevExpense'))
       if (!!prevExpense) {
         setInitialValues(prevExpense)
+        setCategory(prevExpense.category)
+        setPriority(prevExpense.priority)
         sessionStorage.removeItem('prevExpense')
       } else {
         return <Redirect to={routes.home} />
@@ -49,6 +86,9 @@ const ExpensesForm = ({ formType }) => {
       initialValues={initialValues}
       onSubmit={async values => {
         setMessages([])
+
+        values.category = category
+        values.priority = priority
 
         let isValidate = true
 
@@ -90,9 +130,21 @@ const ExpensesForm = ({ formType }) => {
             <Label htmlFor="place">Miejsce</Label>
             <Field type="text" name="place" id="place" />
             <Label htmlFor="category">Kategoria</Label>
-            <Field type="number" name="category" id="category" />
+            <Select as="select" name="category" id="category" value={category} onChange={handleSelectValueChange}>
+              <option value="">- wybierz kategorię -</option>
+              {
+                categories !== undefined ? categories.map(({ id, name }) => <option key={id} value={id}>{ name }</option>) : null
+              }
+              <option>Dodaj kategorię</option>
+            </Select>
             <Label htmlFor="priority">Priorytet</Label>
-            <Field type="number" name="priority" id="priority" />
+            <Select as="select" name="priority" id="priority" value={priority} onChange={handleSelectValueChange}>
+              <option value="">- wybierz priorytet -</option>
+              {
+                priorities !== undefined ? priorities.map(({ id, name }) => <option key={id} value={id}>{ name }</option>) : null
+              }
+              <option>Dodaj priorytet</option>
+            </Select>
             <Button
               background={theme.colors.secondary}
               type="submit"

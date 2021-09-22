@@ -62,7 +62,7 @@ export const refreshToken = createAsyncThunk(
         method: 'POST',
         mode: 'cors',
         credentials: 'include',
-        headers: {
+          headers: {
           'Content-type': 'charset=utf-8',
           'X-CSRFTOKEN': csrfToken
         },

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import TableRow from 'components/molecules/TableRow/TableRow'
-import { getExpenses } from 'slices/expensesSlice'
+import { getExpenses, getCategory, getPriority } from 'slices/expensesSlice'
 import { StyledHeadCell } from './Dashboard.styles'
 
 const Dashboard = () => {
@@ -12,6 +12,8 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getExpenses({ accessToken, csrfToken }))
+    dispatch(getCategory({ accessToken, csrfToken }))
+    dispatch(getPriority({ accessToken, csrfToken }))
   }, [dispatch, accessToken, csrfToken])
 
   return (
@@ -30,8 +32,8 @@ const Dashboard = () => {
         </thead>
         <tbody>
           {
-            expensesList.length > 0 ? expensesList.map(expense => (
-              <TableRow key={expense.id} {...expense} />
+            expensesList.length > 0 ? expensesList.map(({ id, day, price, place, category, priority }) => (
+              <TableRow key={id} day={day} price={price} place={place} categoryId={category} priorityId={priority} />
             )) : (
               <tr>
                 <StyledHeadCell colSpan="7">Brak wydatków</StyledHeadCell>

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import Button from 'components/atoms/Button/Button'
 
 export const StyledCell = styled.td`

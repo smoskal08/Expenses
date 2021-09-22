@@ -3,12 +3,14 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Switch, Route } from 'react-router-dom'
 import Navigation from 'components/organisms/Navigation/Navigation'
-import Modal from 'components/molecules/Modal/Modal'
+import DeleteModal from 'components/molecules/DeleteModal/DeleteModal'
+import CategoryPriorityModal from 'components/molecules/CategoryPriorityModal/CategoryPriorityModal'
 import { routes } from 'routes'
 import { StyledWrapper, Main } from './MainTemplate.styles'
 
 const MainTemplate = ({ children }) => {
-  const isModalOpen = useSelector(state => state.expenses.isModalOpen)
+  const isDeleteModalOpen = useSelector(state => state.expenses.isDeleteModalOpen)
+  const isCategoryPriorityModalOpen = useSelector(state => state.expenses.isCategoryPriorityModalOpen)
 
   return (
     <StyledWrapper>
@@ -46,7 +48,8 @@ const MainTemplate = ({ children }) => {
         />
       </Switch>
       <Main>
-        { isModalOpen && <Modal /> }
+        { isDeleteModalOpen && <DeleteModal /> }
+        { isCategoryPriorityModalOpen && <CategoryPriorityModal /> }
         { children }
       </Main>
     </StyledWrapper>
