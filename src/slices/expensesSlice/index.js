@@ -27,7 +27,6 @@ export const getExpenses = createAsyncThunk(
         .catch(err => {
           err.json().then(errData => checkErrors(errData.detail, csrfToken))
         })
-
       return res
     } catch (err) {
       console.error('Error', err.response.data)
@@ -300,14 +299,15 @@ const expensesSlice = createSlice({
   initialState,
   reducers: {
     openDeleteModal: (state, { payload }) => {
+      console.log(payload)
       state.isDeleteModalOpen = true
       state.actualExpense = {
         id: payload.id,
         day: payload.day,
         price: payload.price,
         place: payload.place,
-        category: payload.category,
-        priority: payload.priority,
+        category: payload.categoryName,
+        priority: payload.priorityName,
       }
     },
     closeDeleteModal: (state, action) => {
@@ -323,7 +323,7 @@ const expensesSlice = createSlice({
   },
   extraReducers: {
     [getExpenses.fulfilled]: (state, { payload }) => {
-      state.expensesList = payload ? payload : []
+      state.expensesList = payload ? payload.reverse() : []
     },
     [getCategory.fulfilled]: (state, { payload }) => {
       state.categories = payload ? payload : []
