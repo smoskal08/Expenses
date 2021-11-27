@@ -205,7 +205,78 @@ export const getCategory = createAsyncThunk(
             csrfToken
           }, getCategory))
         })
-      
+              
+      return res
+    } catch (err) {
+      console.error('Error', err.response.data)
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
+  }
+)
+
+export const editCategory = createAsyncThunk(
+  'expenses/editCategory',
+  async ({ id, name, accessToken, csrfToken }, thunkAPI) => {
+    try {
+      await fetch(`${server}${endpoints.expenses.category}/${id}`, {
+        method: 'PUT',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-CSRFTOKEN': csrfToken
+        },
+        body: JSON.stringify({
+          name
+        })
+      })
+        .then(res => {
+          if (!res.ok) throw res
+        })
+        .catch(err => {
+          err.json().then(errData => checkErrors(errData.detail, csrfToken, {
+            id,
+            name,
+            accessToken,
+            csrfToken
+          }, editCategory))
+        })
+    } catch (err) {
+      console.error('Error', err.response.data)
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
+  }
+)
+
+export const deleteCategory = createAsyncThunk(
+  'expenses/deleteCategory',
+  async ({ id, accessToken, csrfToken }, thunkAPI) => {
+    try {
+      const res = await fetch(`${server}${endpoints.expenses.category}/${id}`, {
+        method: 'DELETE',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-CSRFTOKEN': csrfToken
+        }
+      })
+        .then(res => {
+          if (!res.ok) throw res
+          return res.json()
+        })
+        .catch(err => {
+          err.json().then(errData => checkErrors(errData.detail, csrfToken, {
+            id,
+            accessToken,
+            csrfToken
+          }, deleteCategory))
+        })
+
       return res
     } catch (err) {
       console.error('Error', err.response.data)
@@ -283,35 +354,108 @@ export const getPriority = createAsyncThunk(
   }
 )
 
+export const editPriority = createAsyncThunk(
+  'expenses/editPriority',
+  async ({ id, name, accessToken, csrfToken }, thunkAPI) => {
+    try {
+      await fetch(`${server}${endpoints.expenses.priority}/${id}`, {
+        method: 'PUT',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-CSRFTOKEN': csrfToken
+        },
+        body: JSON.stringify({
+          name
+        })
+      })
+        .then(res => {
+          if (!res.ok) throw res
+        })
+        .catch(err => {
+          err.json().then(errData => checkErrors(errData.detail, csrfToken, {
+            id,
+            name,
+            accessToken,
+            csrfToken
+          }, editPriority))
+        })
+    } catch (err) {
+      console.error('Error', err.response.data)
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
+  }
+)
+
+export const deletePriority = createAsyncThunk(
+  'expenses/deletePriority',
+  async ({ id, accessToken, csrfToken }, thunkAPI) => {
+    try {
+      const res = await fetch(`${server}${endpoints.expenses.priority}/${id}`, {
+        method: 'DELETE',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-CSRFTOKEN': csrfToken
+        }
+      })
+        .then(res => {
+          if (!res.ok) throw res
+          return res.json()
+        })
+        .catch(err => {
+          err.json().then(errData => checkErrors(errData.detail, csrfToken, {
+            id,
+            accessToken,
+            csrfToken
+          }, deletePriority))
+        })
+
+      return res
+    } catch (err) {
+      console.error('Error', err.response.data)
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
+  }
+)
+
 const initialState = {
   expensesList: [],
-  isDeleteModalOpen: false,
+  isExpensesDeleteModalOpen: false,
   actualExpense: {},
   isCategoryPriorityModalOpen: false,
   categoryPriorityModalType: '',
   categories: [],
   priorities: [],
-  addCategoryOrPriority: false
+  addCategoryOrPriority: false,
+  isCategoryPriorityDeleteModalOpen: false,
+  categoryPriorityDeleteModalType: '',
+  actualCategoryPriority: {}
 }
 
 const expensesSlice = createSlice({
   name: 'expenses',
   initialState,
   reducers: {
-    openDeleteModal: (state, { payload }) => {
-      console.log(payload)
-      state.isDeleteModalOpen = true
+    openDeleteModal: (state, { payload: { id, day, price, place, categoryName, priorityName } }) => {
+      state.isExpensesDeleteModalOpen = true
       state.actualExpense = {
-        id: payload.id,
-        day: payload.day,
-        price: payload.price,
-        place: payload.place,
-        category: payload.categoryName,
-        priority: payload.priorityName,
+        id,
+        day,
+        price,
+        place,
+        category: categoryName,
+        priority: priorityName,
       }
     },
     closeDeleteModal: (state, action) => {
-      state.isDeleteModalOpen = false
+      state.isExpensesDeleteModalOpen = false
     },
     openCategoryPriorityModal: (state, { payload }) => {
       state.isCategoryPriorityModalOpen = true
@@ -320,10 +464,21 @@ const expensesSlice = createSlice({
     closeCategoryPriorityModal: (state, action) => {
       state.isCategoryPriorityModalOpen = false
     },
+    openCategoryPriorityDeleteModal: (state, { payload: { tableType, id, name } }) => {
+      state.isCategoryPriorityDeleteModalOpen = true
+      state.categoryPriorityDeleteModalType = tableType
+      state.actualCategoryPriority = {
+        id,
+        name
+      }
+    },
+    closeCategoryPriorityDeleteModal: (state, action) => {
+      state.isCategoryPriorityDeleteModalOpen = false
+    }
   },
   extraReducers: {
     [getExpenses.fulfilled]: (state, { payload }) => {
-      state.expensesList = payload ? payload.reverse() : []
+      state.expensesList = payload.results ? payload.results.reverse() : []
     },
     [getCategory.fulfilled]: (state, { payload }) => {
       state.categories = payload ? payload : []
@@ -340,6 +495,6 @@ const expensesSlice = createSlice({
   }
 })
 
-export const { openDeleteModal, closeDeleteModal, openCategoryPriorityModal, closeCategoryPriorityModal } = expensesSlice.actions
+export const { openDeleteModal, closeDeleteModal, openCategoryPriorityModal, closeCategoryPriorityModal, openCategoryPriorityDeleteModal, closeCategoryPriorityDeleteModal } = expensesSlice.actions
 
 export default expensesSlice.reducer;

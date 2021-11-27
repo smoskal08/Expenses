@@ -3,14 +3,16 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Switch, Route } from 'react-router-dom'
 import Navigation from 'components/organisms/Navigation/Navigation'
-import DeleteModal from 'components/molecules/DeleteModal/DeleteModal'
+import ExpensesDeleteModal from 'components/molecules/ExpensesDeleteModal/ExpensesDeleteModal'
 import CategoryPriorityModal from 'components/molecules/CategoryPriorityModal/CategoryPriorityModal'
+import CategoryPriorityDeleteModal from 'components/molecules/CategoryPriorityDeleteModal/CategoryPriorityDeleteModal'
 import { routes } from 'routes'
 import { StyledWrapper, Main } from './MainTemplate.styles'
 
-const MainTemplate = ({ children }) => {
-  const isDeleteModalOpen = useSelector(state => state.expenses.isDeleteModalOpen)
+const MainTemplate = ({ children, ...props }) => {
+  const isExpensesDeleteModalOpen = useSelector(state => state.expenses.isExpensesDeleteModalOpen)
   const isCategoryPriorityModalOpen = useSelector(state => state.expenses.isCategoryPriorityModalOpen)
+  const isCategoryPriorityDeleteModalOpen = useSelector(state => state.expenses.isCategoryPriorityDeleteModalOpen)
 
   return (
     <StyledWrapper>
@@ -36,6 +38,14 @@ const MainTemplate = ({ children }) => {
           component={() => <Navigation route="edit" />}
         />
         <Route
+          path={routes.editCategory}
+          component={() => <Navigation route="edit-category" />}
+        />
+        <Route
+          path={routes.editPriority}
+          component={() => <Navigation route="edit-priority" />}
+        />
+        <Route
           path={routes.editProfile}
           component={() => <Navigation route="edit-profile" />}
         />
@@ -47,9 +57,10 @@ const MainTemplate = ({ children }) => {
           component={Navigation}
         />
       </Switch>
-      <Main>
-        { isDeleteModalOpen && <DeleteModal /> }
+      <Main {...props}>
+        { isExpensesDeleteModalOpen && <ExpensesDeleteModal /> }
         { isCategoryPriorityModalOpen && <CategoryPriorityModal /> }
+        { isCategoryPriorityDeleteModalOpen && <CategoryPriorityDeleteModal /> }
         { children }
       </Main>
     </StyledWrapper>

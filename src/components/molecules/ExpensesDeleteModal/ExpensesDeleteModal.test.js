@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from 'test-utils'
-import TableRow from 'components/molecules/TableRow/TableRow'
+import TableRow from 'components/molecules/ExpensesTableRow/ExpensesTableRow'
 import MainTemplate from 'components/templates/MainTemplate'
 
 describe('Modal', () => {  

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import TableRow from 'components/molecules/TableRow/TableRow'
+import ExpensesTableRow from 'components/molecules/ExpensesTableRow/ExpensesTableRow'
 import { getExpenses, getCategory, getPriority } from 'slices/expensesSlice'
-import { StyledHeadCell, StyledReactPaginate } from './Dashboard.styles'
+import { HeadCell } from 'components/atoms/HeadCell/HeadCell'
+import { StyledReactPaginate } from './Dashboard.styles'
 
 const itemsPerPage = 5
 
@@ -37,22 +38,22 @@ const Dashboard = () => {
       <table cellSpacing="0">
         <thead>
           <tr>
-            <StyledHeadCell>Dzień</StyledHeadCell>
-            <StyledHeadCell>Cena</StyledHeadCell>
-            <StyledHeadCell>Miejsce</StyledHeadCell>
-            <StyledHeadCell>Kategoria</StyledHeadCell>
-            <StyledHeadCell>Priorytet</StyledHeadCell>
-            <StyledHeadCell>Edytuj</StyledHeadCell>
-            <StyledHeadCell>Usuń</StyledHeadCell>
+            <HeadCell>Dzień</HeadCell>
+            <HeadCell>Cena</HeadCell>
+            <HeadCell>Miejsce</HeadCell>
+            <HeadCell>Kategoria</HeadCell>
+            <HeadCell>Priorytet</HeadCell>
+            <HeadCell>Edytuj</HeadCell>
+            <HeadCell>Usuń</HeadCell>
           </tr>
         </thead>
         <tbody>
           {
             currentItems ? currentItems.map(({ id, day, price, place, category, priority }) => (
-              <TableRow key={id} day={day} id={id} price={price} place={place} categoryId={category} priorityId={priority} />
+              <ExpensesTableRow key={id} day={day} id={id} price={price} place={place} categoryId={category} priorityId={priority} />
             )) : (
               <tr>
-                <StyledHeadCell colSpan="7">Brak wydatków</StyledHeadCell>
+                <HeadCell colSpan="7">Brak wydatków</HeadCell>
               </tr>
             )
           }

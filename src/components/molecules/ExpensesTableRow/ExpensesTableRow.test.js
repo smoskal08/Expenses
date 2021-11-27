@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from 'test-utils'
 import { Switch } from 'react-router-dom'
-import TableRow from './TableRow'
+import TableRow from './ExpensesTableRow'
 import AuthRoute from 'components/molecules/AuthRoute/AuthRoute'
 import MainTemplate from 'components/templates/MainTemplate'
 import ExpensesForm from 'components/organisms/ExpensesForm/ExpensesForm'

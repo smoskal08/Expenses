@@ -6,9 +6,9 @@ import Heading from 'components/atoms/Heading/Heading'
 import { StyledWrapper, StyledButtonsBox, StyledInfoBox, StyledInfoParagraph, StyledBoldText } from '../ModalStyles/Modal.styles'
 import { theme } from 'assets/styles/theme'
 
-const DeleteModal = () => {
+const ExpensesDeleteModal = () => {
   const { id, day, price, place, category, priority } = useSelector(state => state.expenses.actualExpense)
-  const isDeleteModalOpen = useSelector(state => state.expenses.isDeleteModalOpen)
+  const isExpensesDeleteModalOpen = useSelector(state => state.expenses.isExpensesDeleteModalOpen)
   const accessToken = useSelector(state => state.auth.accessToken)
   const csrfToken = document.cookie.split('=')[1]
   const dispatch = useDispatch()
@@ -21,7 +21,7 @@ const DeleteModal = () => {
   }
 
   return (
-    <StyledWrapper appElement={rootElement} isOpen={isDeleteModalOpen} onRequestClose={() => dispatch(closeDeleteModal())}>
+    <StyledWrapper appElement={rootElement} isOpen={isExpensesDeleteModalOpen} onRequestClose={() => dispatch(closeDeleteModal())}>
       <Heading>Czy na pewno chcesz usunąć wydatek z dnia {day}?</Heading>
       <StyledInfoBox>
         <StyledInfoParagraph><StyledBoldText>Cena:</StyledBoldText> {price}</StyledInfoParagraph>
@@ -47,4 +47,4 @@ const DeleteModal = () => {
   )
 }
 
-export default DeleteModal
+export default ExpensesDeleteModal

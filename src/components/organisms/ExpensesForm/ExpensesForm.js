@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import PropTypes from 'prop-types';
 import { Formik } from 'formik'
 import { addExpense, editExpense, openCategoryPriorityModal, getCategory, getPriority } from 'slices/expensesSlice'
 import Form from 'components/atoms/Form/Form'
@@ -12,7 +13,7 @@ import { routes } from 'routes'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSave, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { theme } from 'assets/styles/theme'
-import { Select } from './ExpensesForm.styles'
+import { Select } from 'components/atoms/Select/Select'
 
 const addInitialValues = {
   price: '',
@@ -163,6 +164,14 @@ const ExpensesForm = ({ formType }) => {
       )}
     </Formik>
   )
+}
+
+ExpensesForm.propTypes = {
+  formType: PropTypes.string
+}
+
+ExpensesForm.defaultProps = {
+  formType: ''
 }
 
 export default ExpensesForm

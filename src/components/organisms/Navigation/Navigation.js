@@ -40,6 +40,8 @@ const Navigation = ({ route }) => {
       case 'add':
       case 'edit':
       case 'edit-profile':
+      case 'edit-category':
+      case 'edit-priority':
         return (
           <>
             <StyledLink exact to={routes.home}>home</StyledLink>

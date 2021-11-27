@@ -7,4 +7,6 @@ export const routes = {
   editProfile: '/edit-profile',
   add: '/add',
   edit: '/edit',
+  editCategory: '/edit-category',
+  editPriority: '/edit-priority',
 }

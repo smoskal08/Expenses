@@ -7,6 +7,7 @@ const checkErrors = (err, csrfToken, args, asyncAction=false) => {
     case 'Expired refresh token, please login again.':
     case 'CSRF Failed: CSRF cookie not set.':
     case 'CSRF Failed: CSRF token missing or incorrect.':
+      console.log(err)
       store.dispatch(logout())
       break
     case 'Token prefix missing':

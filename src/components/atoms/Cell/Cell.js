@@ -1,7 +1,6 @@
 import styled from 'styled-components'
-import Button from 'components/atoms/Button/Button'
 
-export const StyledCell = styled.td`
+export const Cell = styled.td`
   padding: ${({ noPadding }) => noPadding ? 0 : '2px 4px'};
   border: 1px solid black;
   border-radius: 6px;
@@ -12,9 +11,4 @@ export const StyledCell = styled.td`
     padding: ${({ noPadding }) => noPadding ? 0 : '5px 10px'};
     font-size: 1.6rem;
   }
-`
-
-export const StyledButton = styled(Button)`
-  display: block;
-  width: 100%;
 `
