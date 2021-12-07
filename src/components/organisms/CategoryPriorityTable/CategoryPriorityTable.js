@@ -1,10 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getCategory, getPriority } from 'slices/expensesSlice'
+import { Redirect } from 'react-router-dom'
+import { getCategory, getPriority, openCategoryPriorityModal } from 'slices/expensesSlice'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import CategoryPriorityTableRow from 'components/molecules/CategoryPriorityTableRow/CategoryPriorityTableRow'
 import { HeadCell } from 'components/atoms/HeadCell/HeadCell'
+import { StyledButton } from './CategoryPriorityTable.styles'
+import { theme } from 'assets/styles/theme'
+import { routes } from 'routes'
 
 const CategoryPriorityTable = ({ tableType }) => {
+  const [isRedirectToHome, setIsRedirectToHome] = useState(false)
   const categories = useSelector(state => state.expenses.categories)
   const priorities = useSelector(state => state.expenses.priorities)
   const accessToken = useSelector(state => state.auth.accessToken)
@@ -18,6 +25,14 @@ const CategoryPriorityTable = ({ tableType }) => {
       dispatch(getPriority({ accessToken, csrfToken }))
     }
   }, [dispatch, accessToken, csrfToken, tableType])
+
+  const handleOpenCategoryPriorityModal = () => {
+    if (tableType === 'category') dispatch(openCategoryPriorityModal('category'))
+    else dispatch(openCategoryPriorityModal('priority'))
+    setIsRedirectToHome(true)
+  }
+
+  if (isRedirectToHome) return <Redirect to={routes.home} />
 
   return (
     <table cellSpacing="0">
@@ -45,6 +60,11 @@ const CategoryPriorityTable = ({ tableType }) => {
               </tr>
             )
         }
+        <tr>
+          <td colSpan="3">
+            <StyledButton aria-label="Add" background={theme.colors.primary} onClick={handleOpenCategoryPriorityModal} data-testid="addButton"><FontAwesomeIcon icon={faPlus} /></StyledButton>
+          </td>
+        </tr>
       </tbody>
     </table>
   )

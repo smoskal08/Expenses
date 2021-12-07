@@ -4,7 +4,7 @@ import { Redirect, Route } from 'react-router-dom';
 import { routes } from 'routes';
 
 const AuthRoute = props => {
-  const { type } = props;
+  const { type } = props
   const isAuthUser = useSelector(state => state.auth.isAuthUser);
 
   if (type === 'guest' && isAuthUser) return <Redirect to={routes.home} />

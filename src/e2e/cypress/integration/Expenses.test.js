@@ -2,7 +2,7 @@ describe('Expenses view', () => {
   beforeEach(() => {
     cy.visit('/')
 
-    cy.findByLabelText(/adres email/i).click().type('test@gmail.com')
+    cy.findByLabelText(/adres email/i).click().type('morrovd5@gmail.com')
     cy.findByLabelText(/hasło/i).click().type('abcde123')
     cy.findByText(/zaloguj się/i).click()
   })

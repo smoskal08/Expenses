@@ -1,6 +1,6 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { BrowserRouter as Router, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import store from 'store'
 import AuthRoute from 'components/molecules/AuthRoute/AuthRoute'
@@ -27,29 +27,25 @@ const Root = () => (
               <Dashboard />
             </MainTemplate>
           </AuthRoute>
-          <AuthRoute path={routes.register}>
+          <AuthRoute path={routes.register} type="guest">
             <MainTemplate isColumn>
-              <>
-                <Heading>Po zarejestrowaniu się na Twój adres email zostanie wysłany link aktywacyjny, po kliknięciu w niego będzie możliwe zalogowanie się.</Heading>
-                <AuthForm formType="register" />
-              </>
+              <Heading>Po zarejestrowaniu się, na Twój adres email zostanie wysłany link aktywacyjny. Po kliknięciu w niego będzie możliwe zalogowanie się.</Heading>
+              <AuthForm formType="register" />
             </MainTemplate>
           </AuthRoute>
-          <AuthRoute>
+          <Route>
             <MainTemplate>
               <Switch>
                 <AuthRoute path={routes.add} type="private">
                   <ExpensesForm formType="add" />
                 </AuthRoute>
-                <AuthRoute path={routes.edit} type="private">
+                <AuthRoute exact path={routes.edit} type="private">
                   <ExpensesForm formType="edit" />
                 </AuthRoute>
                 <AuthRoute path={routes.editProfile} type="private">
-                  <>
-                    <AuthForm />
-                    <CategoryPriorityTable tableType="category" />
-                    <CategoryPriorityTable tableType="priority" />
-                  </>
+                  <AuthForm />
+                  <CategoryPriorityTable tableType="category" />
+                  <CategoryPriorityTable tableType="priority" />
                 </AuthRoute>
                 <AuthRoute path={routes.editCategory} type="private">
                   <CategoryPriorityEditForm formType="category" />
@@ -65,7 +61,7 @@ const Root = () => (
                 </AuthRoute>
               </Switch>
             </MainTemplate>
-          </AuthRoute>
+          </Route>
         </Switch>
       </ThemeProvider>
     </Router>

@@ -11,6 +11,7 @@ export const endpoints = {
     main: 'expenses/',
     category: 'expenses/category',
     priority: 'expenses/priority',
-    detail: 'expenses/expense/'
+    detail: 'expenses/expense/',
+    page: 'expenses/?page='
   }
 }

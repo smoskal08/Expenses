@@ -5,9 +5,9 @@ import checkErrors from 'helpers/checkErrors'
 
 export const getExpenses = createAsyncThunk(
   'expenses/getExpenses',
-  async ({ accessToken, csrfToken }, thunkAPI) => {
+  async ({ accessToken, csrfToken, link = null }, thunkAPI) => {
     try {
-      const res = await fetch(`${server}${endpoints.expenses.main}`, {
+      const res = await fetch(link ? link : `${server}${endpoints.expenses.main}`, {
         method: 'GET',
         mode: 'cors',
         credentials: 'include',
@@ -427,6 +427,11 @@ export const deletePriority = createAsyncThunk(
 
 const initialState = {
   expensesList: [],
+  count: '',
+  nextExpensesLink: '',
+  previousExpensesLink: '',
+  actualPage: '',
+  lastPage: '',
   isExpensesDeleteModalOpen: false,
   actualExpense: {},
   isCategoryPriorityModalOpen: false,
@@ -477,8 +482,14 @@ const expensesSlice = createSlice({
     }
   },
   extraReducers: {
-    [getExpenses.fulfilled]: (state, { payload }) => {
-      state.expensesList = payload.results ? payload.results.reverse() : []
+    [getExpenses.fulfilled]: (state, { payload, payload: { results, count, next, previous } }) => {
+      console.log(payload)
+      state.expensesList = results ? results.reverse() : []
+      state.count = count
+      state.nextExpensesLink = next
+      state.previousExpensesLink = previous
+      state.actualPage = next ? parseInt(next.slice(-1)) - 1 : parseInt(previous.slice(-1)) + 1
+      state.lastPage = Math.ceil(count / 5)
     },
     [getCategory.fulfilled]: (state, { payload }) => {
       state.categories = payload ? payload : []

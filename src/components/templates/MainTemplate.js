@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import PropTypes from 'prop-types'
 import { Switch, Route } from 'react-router-dom'
 import Navigation from 'components/organisms/Navigation/Navigation'
 import ExpensesDeleteModal from 'components/molecules/ExpensesDeleteModal/ExpensesDeleteModal'
@@ -18,6 +17,10 @@ const MainTemplate = ({ children, ...props }) => {
     <StyledWrapper>
       <Switch>
         <Route
+          exact path={routes.home}
+          component={() => <Navigation route="home" />}
+        />
+        <Route
           path={routes.register}
           component={() => <Navigation route="register" />}
         />
@@ -26,11 +29,7 @@ const MainTemplate = ({ children, ...props }) => {
           component={() => <Navigation route="login" />}
         />
         <Route
-          exact path={routes.home}
-          component={() => <Navigation route="home" />}
-        />
-        <Route
-          exact path={routes.add}
+          path={routes.add}
           component={() => <Navigation route="add" />}
         />
         <Route
@@ -68,7 +67,7 @@ const MainTemplate = ({ children, ...props }) => {
 }
 
 MainTemplate.propTypes = {
-  children: PropTypes.element.isRequired,
+  
 }
 
 export default MainTemplate;

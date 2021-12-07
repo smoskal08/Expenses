@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import ExpensesTableRow from 'components/molecules/ExpensesTableRow/ExpensesTableRow'
 import { getExpenses, getCategory, getPriority } from 'slices/expensesSlice'
 import { HeadCell } from 'components/atoms/HeadCell/HeadCell'
-import { StyledReactPaginate } from './Dashboard.styles'
-
-const itemsPerPage = 5
+import { StyledPagination, StyledPaginationElement, StyledPaginationBox } from './Dashboard.styles'
+import { server } from 'server'
+import { endpoints } from 'endpoints'
 
 const Dashboard = () => {
   const accessToken = useSelector(state => state.auth.accessToken)
   const expensesList = useSelector(state => state.expenses.expensesList)
-  const [currentItems, setCurrentItems] = useState(null)
-  const [pageCount, setPageCount] = useState(0)
-  const [itemIndex, setItemIndex] = useState(0)
+  const count = useSelector(state => state.expenses.count)
+  const nextExpensesLink = useSelector(state => state.expenses.nextExpensesLink)
+  const previousExpensesLink = useSelector(state => state.expenses.previousExpensesLink)
+  const actualPage = useSelector(state => state.expenses.actualPage)
+  const lastPage = useSelector(state => state.expenses.lastPage)
   const csrfToken = document.cookie.split('=')[1]
   const dispatch = useDispatch()
 
@@ -22,16 +24,10 @@ const Dashboard = () => {
     dispatch(getPriority({ accessToken, csrfToken }))
   }, [dispatch, accessToken, csrfToken])
 
-  useEffect(() => {
-    const endIndex = itemIndex + itemsPerPage
-    setCurrentItems(expensesList.slice(itemIndex, endIndex))
-    setPageCount(Math.ceil(expensesList.length / itemsPerPage))
-  }, [expensesList, itemIndex])
-
-  const handlePageClick = e => {
-    const newIndex = (e.selected * itemsPerPage) % expensesList.length
-    setItemIndex(newIndex)
-  }
+  const handleFirstExpensesClick = () => dispatch(getExpenses({ accessToken, csrfToken, link: `${server}${endpoints.expenses.page}1` }))
+  const handleNextExpensesClick = () => dispatch(getExpenses({ accessToken, csrfToken, link: nextExpensesLink }))
+  const handlePreviousExpensesClick = () => dispatch(getExpenses({ accessToken, csrfToken, link: previousExpensesLink }))
+  const handleLastExpensesClick = () => dispatch(getExpenses({ accessToken, csrfToken, link: `${server}${endpoints.expenses.page}${lastPage}` }))
 
   return (
     <>
@@ -49,7 +45,7 @@ const Dashboard = () => {
         </thead>
         <tbody>
           {
-            currentItems ? currentItems.map(({ id, day, price, place, category, priority }) => (
+            expensesList.length > 0 ? expensesList.map(({ id, day, price, place, category, priority }) => (
               <ExpensesTableRow key={id} day={day} id={id} price={price} place={place} categoryId={category} priorityId={priority} />
             )) : (
               <tr>
@@ -60,16 +56,13 @@ const Dashboard = () => {
         </tbody>
       </table>
 
-      <StyledReactPaginate
-        breakLabel="..."
-        nextLabel=">"
-        onPageChange={handlePageClick}
-        pageRangeDisplayed={2}
-        marginPagesDisplayed={1}
-        pageCount={pageCount}
-        previousLabel="<"
-        renderOnZeroPageCount={null}
-      />
+      <StyledPagination isVisible={count <= 5}>
+        <StyledPaginationElement right onClick={handleFirstExpensesClick}>{ "<<" }</StyledPaginationElement>
+        <StyledPaginationElement left onClick={handlePreviousExpensesClick}>{ "<" }</StyledPaginationElement>
+        <StyledPaginationElement center>{ actualPage }</StyledPaginationElement>
+        <StyledPaginationElement right onClick={handleNextExpensesClick}>{">"}</StyledPaginationElement>
+        <StyledPaginationElement left onClick={handleLastExpensesClick}>{">>"}</StyledPaginationElement>
+      </StyledPagination>
     </>
   )
 }

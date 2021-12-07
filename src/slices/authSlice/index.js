@@ -7,7 +7,7 @@ export const authDataSend = createAsyncThunk(
   'auth/authDataSend',
   async ({ email, password, type }, thunkAPI) => {
     try {
-      const res = await fetch(`${server}${endpoints.auth.[type]}`, {
+      const res = await fetch(type === 'register' ? `${server}${endpoints.auth.register}` : `${server}${ endpoints.auth.login}`, {
         method: 'POST',
         mode: 'cors',
         credentials: 'include',

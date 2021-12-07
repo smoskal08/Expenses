@@ -1,25 +1,41 @@
-import styled from 'styled-components'
-import ReactPaginate from 'react-paginate'
+import styled, { css } from 'styled-components'
 
-export const StyledReactPaginate = styled(ReactPaginate)`
+export const StyledPagination = styled.ul`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 25px;
   list-style: none;
 
-  li {
-    padding: 10px 15px;
-    background-color: ${({ theme }) => theme.colors.gray};
-    color: ${({ theme }) => theme.colors.secondary};
-    font-size: 1.8rem;
-    border-radius: 8px;
-    opacity: .6;
-    transition: opacity .3s;
-    cursor: pointer;
+  ${({ isVisible }) => 
+    isVisible ? css`
+      display: none;
+    ` : null
+  }
+`
 
-    &:hover {
-      opacity: 1;
-    }
+export const StyledPaginationElement = styled.li`
+  margin: 0 15px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 2rem;
+  color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.secondary};
+  opacity: .8;
+  transition: opacity .3s;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  ${({ left, right, center }) =>
+    right ? css`
+      margin-right: 0;
+    ` : left ? css`
+      margin-left: 0;
+    ` : center ? css`
+      cursor: default;
+    ` : null 
   }
 `
